@@ -1,0 +1,69 @@
+services:
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: $MONGODB_USERNAME
+      MONGO_INITDB_ROOT_PASSWORD: $MONGODB_PASSWORD
+      TZ: Asia/Colombo
+    volumes:
+      - ./mongo:/data/db
+      - ./mongo-backup:/mongo-backup
+    networks:
+      - app-network
+  mongo-express:
+    image: mongo-express:latest
+    container_name: mongo-express
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      ME_CONFIG_OPTIONS_EDITORTHEME: "ambiance"
+      ME_CONFIG_MONGODB_SERVER: $ME_CONFIG_MONGODB_SERVER
+      ME_CONFIG_BASICAUTH_USERNAME: $ME_CONFIG_BASICAUTH_USERNAME
+      ME_CONFIG_BASICAUTH_PASSWORD: $ME_CONFIG_BASICAUTH_PASSWORD
+    networks:
+      - app-network
+  webserver:
+    image: caddy:alpine
+    container_name: webserver
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./caddy/caddy-conf:/etc/caddy/
+      - ./caddy/caddy-data:/data
+    networks:
+      - app-network
+  simple-upload:
+    build: ./simple-upload
+    depends_on:
+      - webserver
+    container_name: simple-upload
+    networks:
+      - app-network
+    volumes:
+      - ./simple-upload/uploads:/usr/src/app/uploads
+  la-fresca-backend:
+    build: ./la-fresca-backend
+    depends_on:
+      - webserver
+    container_name: la-fresca-backend
+    environment:
+      - DATABASE_URL=$LAFRESCA_DB
+    networks:
+      - app-network
+  la-fresca-frontend:
+    build: ./la-fresca-frontend
+    depends_on:
+      - webserver
+      - la-fresca-backend
+    container_name: la-fresca-frontend
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

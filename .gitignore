@@ -1,0 +1,7 @@
+.env
+la-fresca-backend
+la-fresca-frontend
+mongo
+mongo-backup
+caddy/caddy-data
+simple-upload/uploads
