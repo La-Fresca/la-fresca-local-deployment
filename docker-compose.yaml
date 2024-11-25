@@ -10,7 +10,7 @@ services:
       TZ: Asia/Colombo
     volumes:
       - ./mongo:/data/db
-      - ./mongo-backup:/mongo-backup
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     networks:
       - app-network
   mongo-express:
