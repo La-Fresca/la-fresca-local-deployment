@@ -1,22 +1,18 @@
 lafresca.com {
 	tls internal
 	reverse_proxy la-fresca-frontend:3000
-}
-
-lafresca-api.com {
-	tls internal
-	basicauth /swagger-ui* {
-		dasun $2a$14$abAbMMsjt/XAHf2pHUNDcOeI2dkwKX9lFE3LGdgGLDEpSvaqPNTc.
+	redir /api /api/
+	handle_path /api/* {
+		rewrite * /api/lafresca{uri}
+		reverse_proxy la-fresca-backend:8080
 	}
-	reverse_proxy la-fresca-backend:8080
-}
-
-lafresca-upload.com {
-	tls internal
-	reverse_proxy simple-upload:3000
-}
-
-lafresca-mongo.com {
-	tls internal
-	reverse_proxy mongo-express:8081
+	redir /upload /upload/
+	handle_path /upload/* {
+		rewrite * /upload{uri}
+		reverse_proxy simple-upload:3000
+	}
+	redir /mongo-express /mongo-express/
+	handle /mongo-express/* {
+		reverse_proxy mongo-express:8081
+	}
 }
