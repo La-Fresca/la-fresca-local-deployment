@@ -1,8 +1,10 @@
-# La Fresca Administration Manual
+# La Fresca Administration Manual - Group 20
 
-This document provides detailed instructions for setting up and running the La Fresca project locally using Docker. Follow the steps below to get a successful local deployment.
+This document provides detailed instructions for setting up and running the La Fresca project locally using Docker. Follow the steps below to get a successful local deployment. To view a already deployed version of the system visit this [link](https://lafresca.ucsc.eu.org)
 
 ---
+
+
 
 ## Prerequisites
 
