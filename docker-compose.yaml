@@ -47,7 +47,7 @@ services:
     volumes:
       - ./simple-upload/uploads:/usr/src/app/uploads
   la-fresca-backend:
-    build: ./la-fresca-backend
+    image: iamtrazy/la-fresca-backend:latest
     depends_on:
       - webserver
     container_name: la-fresca-backend
@@ -56,7 +56,7 @@ services:
     networks:
       - app-network
   la-fresca-frontend:
-    build: iamtrazy/la-fresca-backend:tagname
+    image: iamtrazy/la-fresca-frontend:latest
     depends_on:
       - webserver
       - la-fresca-backend
