@@ -6,9 +6,7 @@ lafresca.com {
 		rewrite * /api/lafresca{uri}
 		reverse_proxy la-fresca-backend:8080
 	}
-	redir /upload /upload/
-	handle_path /upload/* {
-		rewrite * /upload{uri}
+	handle /upload* {
 		reverse_proxy simple-upload:3000
 	}
 	redir /mongo-express /mongo-express/
