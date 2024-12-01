@@ -56,7 +56,7 @@ services:
     networks:
       - app-network
   la-fresca-frontend:
-    build: ./la-fresca-frontend
+    build: iamtrazy/la-fresca-backend:tagname
     depends_on:
       - webserver
       - la-fresca-backend
