@@ -1,6 +1,7 @@
 .env
 la-fresca-backend
 la-fresca-frontend
+la-fresca-sysadmin-service
 mongo
 mongo-backup
 caddy/caddy-data

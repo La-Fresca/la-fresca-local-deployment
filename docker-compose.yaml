@@ -12,7 +12,7 @@ services:
       - ./mongo:/data/db
       - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     networks:
-      - app-network
+      - la-fresca-network
   mongo-express:
     image: mongo-express:latest
     container_name: mongo-express
@@ -24,46 +24,38 @@ services:
       ME_CONFIG_BASICAUTH_USERNAME: $ME_CONFIG_BASICAUTH_USERNAME
       ME_CONFIG_BASICAUTH_PASSWORD: $ME_CONFIG_BASICAUTH_PASSWORD
     networks:
-      - app-network
-  webserver:
-    image: caddy:alpine
-    container_name: webserver
-    restart: unless-stopped
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./caddy/caddy-conf:/etc/caddy/
-      - ./caddy/caddy-data:/data
-    networks:
-      - app-network
+      - la-fresca-network
   simple-upload:
     build: ./simple-upload
-    depends_on:
-      - webserver
     container_name: simple-upload
     networks:
-      - app-network
+      - la-fresca-network
     volumes:
       - ./simple-upload/uploads:/usr/src/app/uploads
   la-fresca-backend:
-    image: iamtrazy/la-fresca-backend:latest
-    depends_on:
-      - webserver
+    build: ./la-fresca-backend
     container_name: la-fresca-backend
     environment:
       - DATABASE_URL=$LAFRESCA_DB
     networks:
-      - app-network
+      - la-fresca-network
   la-fresca-frontend:
-    image: iamtrazy/la-fresca-frontend:latest
+    build: ./la-fresca-frontend
     depends_on:
-      - webserver
       - la-fresca-backend
     container_name: la-fresca-frontend
     networks:
-      - app-network
+      - la-fresca-network
+  la-fresca-sysadmin-service:
+    build: ./la-fresca-sysadmin-service
+    container_name: la-fresca-sysadmin-service
+    networks:
+      - la-fresca-network
+    environment:
+      - MONGO_URI=$LAFRESCA_DB
+      - DROPBOX_TOKEN=$DROPBOX_TOKEN
+      - JWT_SECRET=$JWT_SECRET
 
 networks:
-  app-network:
+  la-fresca-network:
     driver: bridge

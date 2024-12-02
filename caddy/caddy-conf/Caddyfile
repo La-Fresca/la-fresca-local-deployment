@@ -1,4 +1,4 @@
-lafresca.com {
+lafresca.iamtrazy.eu.org {
 	tls internal
 	reverse_proxy la-fresca-frontend:3000
 	redir /api /api/
@@ -7,7 +7,7 @@ lafresca.com {
 		reverse_proxy la-fresca-backend:8080
 	}
 	redir /upload /upload/
-	handle_path /upload/* {
+	handle_path /upload* {
 		rewrite * /upload{uri}
 		reverse_proxy simple-upload:3000
 	}
