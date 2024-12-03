@@ -1,18 +1,20 @@
 lafresca.iamtrazy.eu.org {
-	tls internal
-	reverse_proxy la-fresca-frontend:3000
-	redir /api /api/
-	handle_path /api/* {
-		rewrite * /api/lafresca{uri}
-		reverse_proxy la-fresca-backend:8080
-	}
-	redir /upload /upload/
-	handle_path /upload* {
-		rewrite * /upload{uri}
-		reverse_proxy simple-upload:3000
-	}
-	redir /mongo-express /mongo-express/
-	handle /mongo-express/* {
-		reverse_proxy mongo-express:8081
-	}
+        tls internal
+        reverse_proxy la-fresca-frontend:3000
+        redir /api /api/
+        handle_path /api/* {
+                rewrite * /api/lafresca{uri}
+                reverse_proxy la-fresca-backend:8080
+        }
+        handle /upload* {
+                reverse_proxy simple-upload:3000
+        }
+        redir /backup-api /backup-api/
+        handle_path /backup-api/* {
+                reverse_proxy la-fresca-sysadmin-service:3000
+        }
+        redir /mongo-express /mongo-express/
+        handle /mongo-express/* {
+                reverse_proxy mongo-express:8081
+        }
 }
