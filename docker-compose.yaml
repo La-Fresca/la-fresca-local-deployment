@@ -1,4 +1,15 @@
 services:
+  caddy:
+    image: caddy:2.8.4-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./caddy/caddy-conf:/etc/caddy/
+      - ./caddy/caddy-data/config:/config
+      - ./caddy/caddy-data/data:/data
+    networks:
+      - la-fresca-network
   mongo:
     image: mongo:latest
     container_name: mongo
